@@ -1,33 +1,56 @@
 const { response, request } = require("express");
+const User = require("../models/user");
+const bcryptjs = require("bcryptjs");
 
-const getUsers = (req = request, res = response) => {
+const getUsers = async (req = request, res = response) => {
+  const { limit = 5, from = 0 } = req.query; // query parameters
 
-  const {apiKey} = req.query// query parameters  
-    
+  /*const users = await User.find({status: true})
+    .skip(+from) // desde, inicio de la paginacion
+    .limit(+limit); // limite de la paginación
+
+  const totalUsers = await User.countDocuments({status: true});  */
+
+  const [total, users] = await Promise.all([
+    User.countDocuments({ status: true }),
+    User.find({ status: true })
+      .skip(+from)
+      .limit(+limit),
+  ]);
+
   res.json({
-    msg: "GET API - Controller",
-    apiKey
+    total,
+    users,
   });
 };
 
-const createUser = (req = request, res = response) => {
-  
-  const {name, age} = req.body;
+const createUser = async (req = request, res = response) => {
+  const { name, email, password, rol } = req.body;
+  const user = new User({ name, email, password, rol });
+
+  const salt = bcryptjs.genSaltSync();
+  user.password = bcryptjs.hashSync(password, salt);
+
+  await user.save();
 
   res.json({
-    msg: "POST API - Controller",
-    name,
-    age
+    user,
   });
 };
 
-const updateUser = (req = request, res = response) => {
-
+const updateUser = async (req = request, res = response) => {
   const id = req.params.id;
-    
+  const { _id, password, google, email, ...data } = req.body;
+
+  if (password) {
+    const salt = bcryptjs.genSaltSync();
+    data.password = bcryptjs.hashSync(password, salt);
+  }
+
+  const user = await User.findByIdAndUpdate(id, data);
+
   res.json({
-    msg: "PUT API - Controller",
-    id
+    user,
   });
 };
 
@@ -37,9 +60,18 @@ const updateUserPatch = (req, res = response) => {
   });
 };
 
-const deleteUser = (req, res = response) => {
+const deleteUser = async (req, res = response) => {
+
+  const id = req.params.id;
+
+  // Borrado fisicamente en bd
+  // const user = await User.findByIdAndDelete(id);
+
+  // Borrado logico en bd
+  const user = await User.findByIdAndUpdate(id, {status: false});
+
   res.json({
-    msg: "DELETE API - Controller",
+    user
   });
 };
 
@@ -48,5 +80,5 @@ module.exports = {
   createUser,
   updateUser,
   updateUserPatch,
-  deleteUser
+  deleteUser,
 };
