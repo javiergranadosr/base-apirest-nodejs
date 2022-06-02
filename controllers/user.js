@@ -61,14 +61,13 @@ const updateUserPatch = (req, res = response) => {
 };
 
 const deleteUser = async (req, res = response) => {
-
   const id = req.params.id;
 
   // Borrado fisicamente en bd
   // const user = await User.findByIdAndDelete(id);
 
   // Borrado logico en bd
-  const user = await User.findByIdAndUpdate(id, {status: false});
+  const user = await User.findByIdAndUpdate(id, { status: false });
 
   res.json({
     user
