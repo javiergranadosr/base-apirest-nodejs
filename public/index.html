@@ -37,7 +37,7 @@
         const dev = "http://localhost:8081/api/auth/google";
         const prod = "https://api-coffe-node-js.herokuapp.com/api/auth/google"; 
 
-        fetch("https://api-coffe-node-js.herokuapp.com/api/auth/google", {
+        fetch(prod, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
