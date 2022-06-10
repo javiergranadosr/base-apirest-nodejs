@@ -1,4 +1,4 @@
-const { Role, User, Category, Product } = require("../models/");
+const { Role, User, Category, Product } = require("../models");
 
 const isRole = async (role) => {
   const exists = await Role.findOne({ rol: role });
@@ -35,10 +35,19 @@ const existProductId = async (id) => {
   }
 };
 
+const validCollections = (collection = "", collections = []) => {
+  const isInclude = collections.includes(collection);
+  if (!isInclude) {
+    throw new Error(`La coleccion ${collection} no es permitida, ${collections}`);
+  }
+  return true;
+};
+
 module.exports = {
   isRole,
   existEmail,
   existUserById,
   existCategoryId,
   existProductId,
+  validCollections,
 };

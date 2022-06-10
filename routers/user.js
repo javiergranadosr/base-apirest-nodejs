@@ -10,7 +10,7 @@ const {
   isRole,
   existEmail,
   existUserById,
-} = require("../helpers/customValidators");
+} = require("../helpers");
 
 const {
   getUsers,

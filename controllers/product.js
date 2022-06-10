@@ -6,7 +6,6 @@ const { Product } = require("../models");
  * @param {*} req
  * @param {*} res
  */
-
 const getProducts = async (req = request, res = response) => {
   try {
     const { limit = 5, from = 0 } = req.query;

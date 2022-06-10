@@ -1,6 +1,11 @@
 const { request, response } = require("express");
 const { Category } = require("../models");
 
+/**
+ * Obtener listado de categorias
+ * @param {*} req 
+ * @param {*} res 
+ */
 const getCategories = async (req = request, res = response) => {
   try {
     const { limit = 5, from = 0 } = req.query;
@@ -26,8 +31,12 @@ const getCategories = async (req = request, res = response) => {
   }
 };
 
-// Obtener categoria, con populate
 
+/**
+ * Obtener informacion de una categoria
+ * @param {*} req 
+ * @param {*} res 
+ */
 const getCategory = async (req = request, res = response) => {
   try {
     const id = req.params.id;
@@ -41,6 +50,12 @@ const getCategory = async (req = request, res = response) => {
   }
 };
 
+/**
+ * Crea una categoria
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ */
 const createCategory = async (req = request, res = response) => {
   try {
     const name = req.body.name.toUpperCase();
@@ -66,8 +81,12 @@ const createCategory = async (req = request, res = response) => {
   }
 };
 
-// Actualizar categoria
 
+/**
+ * Actualiza una categoria
+ * @param {*} req 
+ * @param {*} res 
+ */
 const updateCategory = async (req = request, res = response) => {
   try {
     const id = req.params.id;
@@ -86,8 +105,12 @@ const updateCategory = async (req = request, res = response) => {
   }
 };
 
-// Eliminar categoria - eliminado fisico
 
+/**
+ * Elimina una categoria, eliminado logico
+ * @param {*} req 
+ * @param {*} res 
+ */
 const deleteCategory = async (req = request, res = response) => {
   try {
     const id = req.params.id;
